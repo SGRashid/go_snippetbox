@@ -4,12 +4,17 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 )
 
 func main() {
 	addr := flag.String("addr", defaultAdress, "Сетевой адрес HTTP")
 	flag.Parse()
+
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+
+	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
@@ -20,9 +25,9 @@ func main() {
 
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
-	log.Printf("Сервер запущен на localhost%v", *addr)
+	infoLog.Printf("Сервер запущен на localhost%v", *addr)
 	err := http.ListenAndServe(*addr, mux)
-	log.Fatal(err)
+	errorLog.Fatal(err)
 }
 
 const defaultAdress = ":4000"
