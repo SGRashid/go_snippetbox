@@ -20,19 +20,19 @@ func main() {
 		infoLog:  infoLog,
 	}
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", app.home)
-	mux.HandleFunc("/snippet", app.showSnippet)
-	mux.HandleFunc("/snippet/create", app.createSnippet)
+	// mux := http.NewServeMux()
+	// mux.HandleFunc("/", app.home)
+	// mux.HandleFunc("/snippet", app.showSnippet)
+	// mux.HandleFunc("/snippet/create", app.createSnippet)
 
-	fileServer := http.FileServer(neuteredFileSystem{http.Dir("./static")})
+	// fileServer := http.FileServer(neuteredFileSystem{http.Dir("./static")})
 
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+	// mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
 	srv := &http.Server{
 		Addr:     *addr,
 		ErrorLog: errorLog,
-		Handler:  mux,
+		Handler:  app.routes(),
 	}
 
 	infoLog.Printf("Сервер запущен на localhost%v", *addr)
